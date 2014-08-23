@@ -1,14 +1,11 @@
 package holo.src.entity;
 
-import holo.src.render.GameRender;
-import holo.src.worlds.World;
+import holo.src.item.*;
+import holo.src.render.*;
+import holo.src.worlds.*;
 
-import org.newdawn.slick.Input;
-import org.newdawn.slick.InputListener;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.*;
+import org.newdawn.slick.geom.*;
 
 public class EntityPlayer extends EntityLiving implements InputListener
 {
@@ -41,10 +38,38 @@ public class EntityPlayer extends EntityLiving implements InputListener
 	{
 		return "res.textures.entity.Player.png";
 	}
-	
-	public void attack()
+
+	@Override
+	public float getHealth()
 	{
-		
+		return 20;
+	}
+
+	@Override
+	public float getArmor()
+	{
+		return 0;
+	}
+	
+	@Override
+	public void attack(EnumItemType itemType, ItemWeapon weapon, Shape attackBox)
+	{
+		switch(itemType)
+		{
+		case SWORD:
+			Entity e = world.isCollidingWithEntity(attackBox);
+			if(e != null)
+			{
+				
+			}
+			break;
+		case BOW:
+			break;
+		case DAGGER:
+			break;
+		default:
+			break;
+		}
 	}
 	
 	public void interact()

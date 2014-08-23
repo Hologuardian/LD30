@@ -38,6 +38,18 @@ public class World
 		return false;
 	}
 	
+	public Entity isCollidingWithEntity(Shape bb)
+	{
+		for(Entity e : entityList)
+		{
+			if(e.getBBWithLocation().intersects(bb))
+			{
+				return e;
+			}
+		}
+		return null;
+	}
+	
 	public void updateLighting()
 	{
 		for(LightSource l : lightArray)

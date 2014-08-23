@@ -1,5 +1,7 @@
 package holo.src.item;
 
+import holo.src.entity.EntityLiving;
+
 import org.newdawn.slick.Image;
 
 public abstract class Item
@@ -29,7 +31,7 @@ public abstract class Item
 		}
 	}
 	
-	public abstract void onUpdate();
+	public abstract void onUse(EntityLiving entity);
 	
 	public Image getIdleImage()
 	{

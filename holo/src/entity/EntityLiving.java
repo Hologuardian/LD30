@@ -2,6 +2,7 @@ package holo.src.entity;
 
 import holo.src.item.Inventory;
 import holo.src.item.Item;
+import holo.src.item.ItemWeapon;
 import holo.src.worlds.World;
 
 import org.newdawn.slick.Image;
@@ -14,11 +15,13 @@ public abstract class EntityLiving extends Entity
 	public Vector2f looking;
 	public Vector2f facing;
 	public World world;
+	public int attackTimer = 0;
 	
 	public Inventory inventory;
 	public Image texture;
+	public float health;
 
-	public EntityLiving(int x, int y, World world) throws SlickException 
+	public EntityLiving(int x, int y, World world) throws SlickException
 	{
 		super(x, y);
 		this.world = world;
@@ -41,6 +44,11 @@ public abstract class EntityLiving extends Entity
 		if(!world.isColliding(this.getBBWithLocation(py)))
 		{
 			this.addPosition(0, s.getY());
+		}
+		
+		if(this.attackTimer >= 0)
+		{
+			this.attackTimer -= delta;
 		}
 	}
 	
@@ -119,6 +127,25 @@ public abstract class EntityLiving extends Entity
 		return world;
 	}
 	
+	public int getAttackTimer()
+	{
+		return attackTimer;
+	}
+	
+	public void setAttackTimer(int timer)
+	{
+		this.attackTimer = timer;
+	}
+	
+	public void takeDamage(float damage, EnumItemType itemType, EntityLiving attackingEntity)
+	{
+		float d  = damage * (25.0F / this.getArmor());
+		this.health -= d;
+	}
+	
+	public abstract void attack(EnumItemType itemType, ItemWeapon weapon, Shape attackBox);
 	public abstract String getTextureName();
 	public abstract float getMoveSpeed();
+	public abstract float getHealth();
+	public abstract float getArmor();
 }
