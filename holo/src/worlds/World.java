@@ -15,6 +15,8 @@ public class World
 {
 	public Tile[][] tileList;
 	public ArrayList<Entity> entityList = new ArrayList<Entity>();
+	public ArrayList<Entity> entitiesToAdd = new ArrayList<Entity>();
+	
 	public ArrayList<Shape> bbList = new ArrayList<Shape>();
 	public StateBasedGame game;
 	public GameRender render;
@@ -26,6 +28,22 @@ public class World
 	{
 		this.game = game;
 		this.render = render;
+	}
+	
+	public void update(int delta)
+	{
+		this.updateLighting();
+		for(Entity e : entitiesToAdd)
+		{
+			entityList.add(e);
+		}
+		entitiesToAdd.clear();
+	}
+	
+	public void addEntity(Entity e)
+	{
+		entitiesToAdd.add(e);
+		render.addEntityToRenderList(e);
 	}
 	
 	public boolean isColliding(Shape bb)
@@ -58,20 +76,20 @@ public class World
 			int x = (int)p.getX();
 			int y = (int)p.getY();
 
-			updateLight(x, y, (int)l.getColor().r * 255, (int)l.getColor().g * 255, (int)l.getColor().b * 255, 255 - l.getStrength());
+			updateLight(x, y, l.getColor().r * 255, l.getColor().g * 255, l.getColor().b * 255, 255 - l.getStrength());
 		}
 		
 		render.lightMapTemp = lightMap;
 	}
 	
-	public void updateLight(int x, int y, int r, int g, int b, int strength)
+	public void updateLight(int x, int y, float r, float g, float b, int strength)
 	{
 		if(strength > 255 || y >= lightMap.length || x >= lightMap[0].length)
 			return;
 		
-		int modR = (r / 255) * (255 - strength);
-		int modG = (g / 255) * (255 - strength);
-		int modB = (b / 255) * (255 - strength);
+		int modR = (int)((r / 255) * (255 - strength));
+		int modG = (int)((g / 255) * (255 - strength));
+		int modB = (int)((b / 255) * (255 - strength));
 		int alpha = strength;
 		
 		if(lightMap[y][x][0] >= modR && lightMap[y][x][1] >= modG && lightMap[y][x][2] >= modB && lightMap[y][x][3] <= alpha)

@@ -27,6 +27,7 @@ public class GameState extends BasicGameState
 		Map map = new Map("test");
 		world.loadMap(map);
 		player = new EntityPlayer((int)world.loadedMap.spawn.getX(), (int)world.loadedMap.spawn.getY(), world);
+		EntityDummy dummy = new EntityDummy(200, 100, world);
 		gc.getInput().addListener(player);
 	}
 
@@ -46,7 +47,7 @@ public class GameState extends BasicGameState
 	public void update(GameContainer gc, StateBasedGame game, int delta) throws SlickException 
 	{
 		player.update(delta);
-		world.updateLighting();
+		world.update(delta);
 	}
 
 	@Override

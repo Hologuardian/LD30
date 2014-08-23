@@ -21,14 +21,15 @@ public abstract class EntityLiving extends Entity
 	public Image texture;
 	public float health;
 
-	public EntityLiving(int x, int y, World world) throws SlickException
+	public EntityLiving(int x, int y, World world, String texture) throws SlickException
 	{
 		super(x, y);
 		this.world = world;
 		speed = new Vector2f();
 		looking = new Vector2f();
 		facing = new Vector2f();
-		texture = new Image("res/textures/entity/Player.png");
+		this.texture = new Image(texture);
+		world.addEntity(this);
 	}
 
 	public void update(int delta) 

@@ -13,7 +13,7 @@ public class EntityPlayer extends EntityLiving implements InputListener
 	
 	public EntityPlayer(int x, int y, World world) throws SlickException
 	{
-		super(x, y, world);
+		super(x, y, world, "res/textures/entity/Player.png");
 	}
 
 	@Override

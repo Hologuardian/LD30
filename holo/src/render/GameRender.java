@@ -2,6 +2,7 @@ package holo.src.render;
 
 import holo.src.entity.Entity;
 import holo.src.entity.EntityLiving;
+import holo.src.entity.EntityPlayer;
 import holo.src.lighting.LightSource;
 import holo.src.tile.Tile;
 
@@ -119,6 +120,8 @@ public class GameRender
 		
 		for(Entity e : entitiesToRender)
 		{
+			if(e instanceof EntityPlayer)
+				continue;
 			if(e instanceof EntityLiving)
 				this.renderEntityLiving(gc, g, (EntityLiving)e);
 			else
