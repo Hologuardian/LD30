@@ -1,5 +1,7 @@
 package holo.src.entity;
 
+import java.util.ArrayList;
+
 import holo.src.item.*;
 import holo.src.render.*;
 import holo.src.worlds.*;
@@ -14,6 +16,7 @@ public class EntityPlayer extends EntityLiving implements InputListener
 	public EntityPlayer(int x, int y, World world) throws SlickException
 	{
 		super(x, y, world, "res/textures/entity/Player.png");
+		this.inventory = new Inventory(9);
 	}
 
 	@Override
@@ -57,10 +60,16 @@ public class EntityPlayer extends EntityLiving implements InputListener
 		switch(itemType)
 		{
 		case SWORD:
-			Entity e = world.isCollidingWithEntity(attackBox);
-			if(e != null)
+			ArrayList<Entity> entities = world.isCollidingWithEntity(attackBox);
+			for(Entity e : entities)
 			{
-				
+				if(e != null && e != this)
+				{
+					if(e instanceof EntityLiving)
+					{
+						((EntityLiving)e).takeDamage(weapon.getDamage(), itemType, this);
+					}
+				}
 			}
 			break;
 		case BOW:
@@ -104,7 +113,13 @@ public class EntityPlayer extends EntityLiving implements InputListener
 	@Override
 	public void mousePressed(int button, int x, int y)
 	{
-		
+		if(button == Input.MOUSE_LEFT_BUTTON)
+		{
+			if(this.inventory.getSelectedItem() != null && this.inventory.getSelectedItem() instanceof ItemWeapon)
+			{
+				this.inventory.getSelectedItem().onUse(this);
+			}
+		}
 	}
 
 	@Override
@@ -157,6 +172,11 @@ public class EntityPlayer extends EntityLiving implements InputListener
 			this.addSpeed(0, this.getMoveSpeed());
 		if(key == Input.KEY_E)
 			this.interact();
+		if(key == Input.KEY_1)
+		{
+			this.inventory.addItem(ItemHelper.basicSword);
+			this.inventory.selectItem(0);
+		}
 	}
 
 	@Override

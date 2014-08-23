@@ -27,7 +27,7 @@ public class GameState extends BasicGameState
 		Map map = new Map("test");
 		world.loadMap(map);
 		player = new EntityPlayer((int)world.loadedMap.spawn.getX(), (int)world.loadedMap.spawn.getY(), world);
-		EntityDummy dummy = new EntityDummy(200, 100, world);
+		EntityDummy dummy = new EntityDummy(250, 100, world);
 		gc.getInput().addListener(player);
 	}
 

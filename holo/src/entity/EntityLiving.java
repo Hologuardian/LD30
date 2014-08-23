@@ -47,7 +47,7 @@ public abstract class EntityLiving extends Entity
 			this.addPosition(0, s.getY());
 		}
 		
-		if(this.attackTimer >= 0)
+		if(this.attackTimer > 0)
 		{
 			this.attackTimer -= delta;
 		}
@@ -142,6 +142,8 @@ public abstract class EntityLiving extends Entity
 	{
 		float d  = damage * (25.0F / this.getArmor());
 		this.health -= d;
+		int knockback = 5;
+		this.addPosition(attackingEntity.getFacing().copy().normalise().negate().getX() * knockback, attackingEntity.getFacing().copy().normalise().negate().getY() * knockback);
 	}
 	
 	public abstract void attack(EnumItemType itemType, ItemWeapon weapon, Shape attackBox);

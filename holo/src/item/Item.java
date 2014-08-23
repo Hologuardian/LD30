@@ -2,7 +2,7 @@ package holo.src.item;
 
 import holo.src.entity.EntityLiving;
 
-import org.newdawn.slick.Image;
+import org.newdawn.slick.*;
 
 public abstract class Item
 {
@@ -32,6 +32,7 @@ public abstract class Item
 	}
 	
 	public abstract void onUse(EntityLiving entity);
+	public abstract void render(GameContainer gc, Graphics g, EntityLiving e, float xMod, float yMod);
 	
 	public Image getIdleImage()
 	{

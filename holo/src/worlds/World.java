@@ -56,16 +56,17 @@ public class World
 		return false;
 	}
 	
-	public Entity isCollidingWithEntity(Shape bb)
+	public ArrayList<Entity> isCollidingWithEntity(Shape bb)
 	{
+		ArrayList<Entity> list = new ArrayList<Entity>();
 		for(Entity e : entityList)
 		{
 			if(e.getBBWithLocation().intersects(bb))
 			{
-				return e;
+				list.add(e);
 			}
 		}
-		return null;
+		return list;
 	}
 	
 	public void updateLighting()

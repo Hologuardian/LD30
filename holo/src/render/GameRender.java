@@ -3,6 +3,7 @@ package holo.src.render;
 import holo.src.entity.Entity;
 import holo.src.entity.EntityLiving;
 import holo.src.entity.EntityPlayer;
+import holo.src.item.*;
 import holo.src.lighting.LightSource;
 import holo.src.tile.Tile;
 
@@ -173,9 +174,17 @@ public class GameRender
 		image.rotate((float) entity.facing.negate().getTheta());
 		
 		float x = entity.getPosition().getX() + entity.getBB().getWidth() / 2 - camera.getX() + windowWidth / 2;
-		float y =entity.getPosition().getY() + entity.getBB().getHeight() / 2 - camera.getY() + windowHeight / 2;
+		float y = entity.getPosition().getY() + entity.getBB().getHeight() / 2 - camera.getY() + windowHeight / 2;
 		
 		image.drawCentered(x, y);
 		
+		if(entity.inventory != null)
+		{
+			if(entity.inventory.getSelectedItem() != null)
+			{
+				Item i = entity.inventory.getSelectedItem();
+				i.render(gc, g, entity, (windowWidth / 2) - camera.getX(), (windowHeight / 2) - camera.getY());
+			}
+		}
 	}
 }
