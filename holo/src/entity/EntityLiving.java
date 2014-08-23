@@ -146,6 +146,11 @@ public abstract class EntityLiving extends Entity
 		this.addPosition(attackingEntity.getFacing().copy().normalise().negate().getX() * knockback, attackingEntity.getFacing().copy().normalise().negate().getY() * knockback);
 	}
 	
+	public void setDead()
+	{
+		this.world.removeEntity(this);
+	}
+	
 	public abstract void attack(EnumItemType itemType, ItemWeapon weapon, Shape attackBox);
 	public abstract String getTextureName();
 	public abstract float getMoveSpeed();

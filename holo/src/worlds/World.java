@@ -16,6 +16,7 @@ public class World
 	public Tile[][] tileList;
 	public ArrayList<Entity> entityList = new ArrayList<Entity>();
 	public ArrayList<Entity> entitiesToAdd = new ArrayList<Entity>();
+	public ArrayList<Entity> entitiesToRemove = new ArrayList<Entity>();
 	
 	public ArrayList<Shape> bbList = new ArrayList<Shape>();
 	public StateBasedGame game;
@@ -38,6 +39,11 @@ public class World
 			entityList.add(e);
 		}
 		entitiesToAdd.clear();
+		for(Entity e : entitiesToRemove)
+		{
+			entityList.remove(e);
+		}
+		entitiesToRemove.clear();
 	}
 	
 	public void addEntity(Entity e)
@@ -164,5 +170,11 @@ public class World
 				}
 			}
 		}
+	}
+
+	public void removeEntity(Entity entity)
+	{
+		entitiesToRemove.add(entity);
+		render.removeEntityFromRenderList(entity);
 	}
 }

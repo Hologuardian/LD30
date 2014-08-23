@@ -61,4 +61,6 @@ public abstract class Entity
 		bb.setY(v.getY());
 		return bb;
 	}
+	
+	public abstract void setDead();
 }

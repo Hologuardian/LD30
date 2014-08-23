@@ -1,49 +1,94 @@
 package holo.src.entity;
 
-import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Shape;
+import java.util.ArrayList;
 
-public class EntityArrow extends Entity
+import org.newdawn.slick.geom.*;
+
+
+public abstract class EntityArrow extends Entity
 {
+	public EntityLiving shooter;
+	public Vector2f facing = new Vector2f();
+	
+	public EntityArrow()
+	{
+		super(0,0);
+	}
+	
 	public EntityArrow(int x, int y)
 	{
 		super(x, y);
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public String getName()
-	{
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
 	public void update(int delta)
 	{
-		// TODO Auto-generated method stub
+		Vector2f s = this.getSpeed().copy().scale(delta);
 		
+		Vector2f px = this.getPosition().copy().add(new Vector2f(s.getX(), 0));
+		Vector2f py = this.getPosition().copy().add(new Vector2f(0, s.getY()));
+		if(!this.shooter.world.isColliding(this.getBBWithLocation(px)))
+		{
+			this.addPosition(s.getX(), 0);
+		}
+		else
+		{
+			ArrayList<Entity> entities = this.shooter.world.isCollidingWithEntity(this.getBBWithLocation(px));
+			for(Entity e : entities)
+			{
+				if(e != null && e instanceof EntityLiving && e != shooter)
+				{
+					((EntityLiving)e).takeDamage(this.getDamage(), EnumItemType.BOW, this.shooter);
+				}
+			}
+			
+			this.setDead();
+		}
+		if(!this.shooter.world.isColliding(this.getBBWithLocation(py)))
+		{
+			this.addPosition(0, s.getY());
+		}
+		else
+		{
+			ArrayList<Entity> entities = this.shooter.world.isCollidingWithEntity(this.getBBWithLocation(px));
+			for(Entity e : entities)
+			{
+				if(e != null && e instanceof EntityLiving && e != shooter)
+				{
+					((EntityLiving)e).takeDamage(this.getDamage(), EnumItemType.BOW, this.shooter);
+				}
+			}
+			
+			this.setDead();
+		}
 	}
 
 	@Override
 	public boolean isCollidable()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
-
-	@Override
-	public Shape getBB()
+	
+	public void setShooter(EntityLiving e)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		shooter = e;
 	}
-
-	@Override
-	public Image getImage()
+	
+	public void setFacing(Vector2f v)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		this.facing.set(v);
 	}
-
+	
+	public abstract float getDamage();
+	public abstract Vector2f getSpeed();
+	
+	public void onCollideWithEntity()
+	{
+		
+	}
+	
+	public void setDead()
+	{
+		this.shooter.world.removeEntity(this);
+	}
 }
