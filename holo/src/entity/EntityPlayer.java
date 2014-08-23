@@ -17,6 +17,8 @@ public class EntityPlayer extends EntityLiving implements InputListener
 	{
 		super(x, y, world, "res/textures/entity/Player.png");
 		this.inventory = new Inventory(9);
+		this.inventory.addItem(ItemHelper.basicSword);
+		this.inventory.addItem(ItemHelper.basicBow);
 	}
 
 	@Override
@@ -173,10 +175,9 @@ public class EntityPlayer extends EntityLiving implements InputListener
 		if(key == Input.KEY_E)
 			this.interact();
 		if(key == Input.KEY_1)
-		{
-			this.inventory.addItem(ItemHelper.basicSword);
 			this.inventory.selectItem(0);
-		}
+		if(key == Input.KEY_2)
+			this.inventory.selectItem(1);
 	}
 
 	@Override

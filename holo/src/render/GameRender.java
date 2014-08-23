@@ -1,8 +1,6 @@
 package holo.src.render;
 
-import holo.src.entity.Entity;
-import holo.src.entity.EntityLiving;
-import holo.src.entity.EntityPlayer;
+import holo.src.entity.*;
 import holo.src.item.*;
 import holo.src.lighting.LightSource;
 import holo.src.tile.Tile;
@@ -125,6 +123,8 @@ public class GameRender
 				continue;
 			if(e instanceof EntityLiving)
 				this.renderEntityLiving(gc, g, (EntityLiving)e);
+			else if (e instanceof EntityArrow)
+				this.renderArrow(gc, g, (EntityArrow)e);
 			else
 				this.renderEntity(gc, g, e);
 		}
@@ -137,6 +137,17 @@ public class GameRender
 		renderLighting(gc, g);
 	}
 	
+	private void renderArrow(GameContainer gc, Graphics g, EntityArrow entity)
+	{
+		Image image = entity.getImage().copy();
+		image.rotate((float) entity.facing.getTheta());
+		
+		float x = entity.getPosition().getX() + entity.getBB().getWidth() / 2 - camera.getX() + windowWidth / 2;
+		float y = entity.getPosition().getY() + entity.getBB().getHeight() / 2 - camera.getY() + windowHeight / 2;
+		
+		image.drawCentered(x, y);
+	}
+
 	public void renderLighting(GameContainer gc, Graphics g)
 	{
 		for(int i = 0; i < lightMap.length; ++i)

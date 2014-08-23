@@ -44,6 +44,11 @@ public class World
 			entityList.remove(e);
 		}
 		entitiesToRemove.clear();
+		
+		for(Entity e : entityList)
+		{
+			e.update(delta);
+		}
 	}
 	
 	public void addEntity(Entity e)
