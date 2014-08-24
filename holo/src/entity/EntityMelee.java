@@ -65,7 +65,6 @@ public class EntityMelee extends EntityLiving
 			Vector2f v = this.looking.copy().normalise().negate().scale(this.getMoveSpeed());
 			this.setSpeed(v.getX(), v.getY());
 		}
-		
 	}
 
 	@Override
