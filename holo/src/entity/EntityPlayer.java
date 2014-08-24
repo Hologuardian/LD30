@@ -95,6 +95,12 @@ public class EntityPlayer extends EntityLiving implements InputListener
 	}
 
 	@Override
+	public int getWieght()
+	{
+		return 15;
+	}
+
+	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount)
 	{
 		
@@ -178,6 +184,20 @@ public class EntityPlayer extends EntityLiving implements InputListener
 			this.inventory.selectItem(0);
 		if(key == Input.KEY_2)
 			this.inventory.selectItem(1);
+		if(key == Input.KEY_3)
+			this.inventory.selectItem(2);
+		if(key == Input.KEY_4)
+			this.inventory.selectItem(3);
+		if(key == Input.KEY_5)
+			this.inventory.selectItem(4);
+		if(key == Input.KEY_6)
+			this.inventory.selectItem(5);
+		if(key == Input.KEY_7)
+			this.inventory.selectItem(6);
+		if(key == Input.KEY_8)
+			this.inventory.selectItem(7);
+		if(key == Input.KEY_9)
+			this.inventory.selectItem(8);
 	}
 
 	@Override

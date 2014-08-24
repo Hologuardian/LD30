@@ -17,20 +17,20 @@ public class World
 	public ArrayList<Entity> entityList = new ArrayList<Entity>();
 	public ArrayList<Entity> entitiesToAdd = new ArrayList<Entity>();
 	public ArrayList<Entity> entitiesToRemove = new ArrayList<Entity>();
-	
+
 	public ArrayList<Shape> bbList = new ArrayList<Shape>();
 	public StateBasedGame game;
 	public GameRender render;
 	public Map loadedMap;
 	public int[][][] lightMap;
 	public ArrayList<LightSource> lightArray = new ArrayList<LightSource>();
-	
+
 	public World(StateBasedGame game, GameRender render)
 	{
 		this.game = game;
 		this.render = render;
 	}
-	
+
 	public void update(int delta)
 	{
 		this.updateLighting();
@@ -44,19 +44,19 @@ public class World
 			entityList.remove(e);
 		}
 		entitiesToRemove.clear();
-		
+
 		for(Entity e : entityList)
 		{
 			e.update(delta);
 		}
 	}
-	
+
 	public void addEntity(Entity e)
 	{
 		entitiesToAdd.add(e);
 		render.addEntityToRenderList(e);
 	}
-	
+
 	public boolean isColliding(Shape bb)
 	{
 		for(Shape bbox : bbList)
@@ -66,7 +66,7 @@ public class World
 		}
 		return false;
 	}
-	
+
 	public ArrayList<Entity> isCollidingWithEntity(Shape bb)
 	{
 		ArrayList<Entity> list = new ArrayList<Entity>();
@@ -79,7 +79,7 @@ public class World
 		}
 		return list;
 	}
-	
+
 	public void updateLighting()
 	{
 		for(LightSource l : lightArray)
@@ -90,28 +90,28 @@ public class World
 
 			updateLight(x, y, l.getColor().r * 255, l.getColor().g * 255, l.getColor().b * 255, 255 - l.getStrength());
 		}
-		
+
 		render.lightMapTemp = lightMap;
 	}
-	
+
 	public void updateLight(int x, int y, float r, float g, float b, int strength)
 	{
 		if(strength > 255 || y >= lightMap.length || x >= lightMap[0].length)
 			return;
-		
+
 		int modR = (int)((r / 255) * (255 - strength));
 		int modG = (int)((g / 255) * (255 - strength));
 		int modB = (int)((b / 255) * (255 - strength));
 		int alpha = strength;
-		
+
 		if(lightMap[y][x][0] >= modR && lightMap[y][x][1] >= modG && lightMap[y][x][2] >= modB && lightMap[y][x][3] <= alpha)
 			return;
-		
+
 		lightMap[y][x][0] = Math.max(lightMap[y][x][0], modR);
 		lightMap[y][x][1] = Math.max(lightMap[y][x][1], modG);
 		lightMap[y][x][2] = Math.max(lightMap[y][x][2], modB);
 		lightMap[y][x][3] = Math.min(lightMap[y][x][3], alpha);
-		
+
 		if(x - 1 >= 0)
 		{
 			updateLight(x - 1, y, r, g, b, strength + LightSource.size);
@@ -129,7 +129,7 @@ public class World
 			updateLight(x, y + 1, r, g, b, strength + LightSource.size);
 		}
 	}
-	
+
 	public void loadMap(Map map)
 	{
 		loadedMap = map;
@@ -142,7 +142,7 @@ public class World
 		}
 		render.lightMap = lightMap.clone();
 		render.lightMapTemp = lightMap.clone();
-		
+
 		for(int i = 0; i < lightMap.length; ++i)
 		{
 			for(int j = 0; j < lightMap[0].length; ++j)
@@ -153,7 +153,7 @@ public class World
 				lightMap[i][j][3] = 255;
 			}
 		}
-		
+
 		for(int i = 0; i < tileMap.length; ++i)
 		{
 			for(int j = 0; j < tileMap[0].length; ++j)
@@ -175,11 +175,31 @@ public class World
 				}
 			}
 		}
+		
+		for(int i = 0; i < map.entityList.length; ++i)
+		{
+			entityList.add(EntityHelper.makeEntity(Integer.valueOf(map.entityList[i][0]), this, new Vector2f(Float.valueOf(map.entityList[i][1]),Float.valueOf(map.entityList[i][2]))));
+		}
 	}
 
 	public void removeEntity(Entity entity)
 	{
 		entitiesToRemove.add(entity);
 		render.removeEntityFromRenderList(entity);
+	}
+
+	public EntityLiving findTarget(int range, Vector2f pos)
+	{
+		for(Entity e : entityList)
+		{
+			if(pos.copy().sub(e.getCenterPosition()).length() < range)
+			{
+				if(e instanceof EntityPlayer)
+				{
+					return (EntityLiving)e;
+				}
+			}
+		}
+		return null;
 	}
 }

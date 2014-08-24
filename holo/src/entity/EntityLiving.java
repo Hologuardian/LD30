@@ -20,6 +20,7 @@ public abstract class EntityLiving extends Entity
 	public Inventory inventory;
 	public Image texture;
 	public float health;
+	public boolean hasInitHp = false;
 
 	public EntityLiving(int x, int y, World world, String texture) throws SlickException
 	{
@@ -34,6 +35,13 @@ public abstract class EntityLiving extends Entity
 
 	public void update(int delta) 
 	{
+		if(!hasInitHp)
+		{
+			this.health = this.getHealth();
+			this.hasInitHp = true;
+		}
+		if(this.health <= 0)
+			this.setDead();
 		Vector2f s = this.speed.copy().scale(delta);
 		
 		Vector2f px = this.getPosition().copy().add(new Vector2f(s.getX(), 0));
@@ -140,12 +148,14 @@ public abstract class EntityLiving extends Entity
 	
 	public void takeDamage(float damage, EnumItemType itemType, EntityLiving attackingEntity)
 	{
-		float d  = damage * (25.0F / this.getArmor());
+		float d  = damage * (1 - this.getArmor() / 25);
 		this.health -= d;
 		int knockback = 5;
-		this.addPosition(attackingEntity.getFacing().copy().normalise().negate().getX() * knockback, attackingEntity.getFacing().copy().normalise().negate().getY() * knockback);
+		Vector2f v = attackingEntity.getFacing().copy().normalise().negate().scale(knockback / this.getWieght());
+		this.addPosition(v.getX(), v.getY());
 	}
 	
+
 	public void setDead()
 	{
 		this.world.removeEntity(this);
@@ -156,4 +166,5 @@ public abstract class EntityLiving extends Entity
 	public abstract float getMoveSpeed();
 	public abstract float getHealth();
 	public abstract float getArmor();
+	public abstract int getWieght();
 }

@@ -64,4 +64,10 @@ public class EntityDummy extends EntityLiving
 		return boundingBox;
 	}
 
+	@Override
+	public int getWieght()
+	{
+		return 1;
+	}
+
 }
